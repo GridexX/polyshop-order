@@ -16,7 +16,7 @@ public class CreateProductDto implements Dto<Product> {
 
     @Override
     public void validate() throws DtoException {
-        if (productId == null || productId.isBlank()) {
+        if (productId == null || productId.isEmpty()) {
             throw new ValidationException("Product id is required");
         }
 
