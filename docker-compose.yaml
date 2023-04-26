@@ -3,9 +3,35 @@ version: '3'
 services:
   postgres:
     image: postgres:15.2
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
+    # ports:
+    #   - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: order
+    networks:
+      - internal
+      
+  order:
+    image: maven:3.9-amazoncorretto-19
+    container_name: order
+    volumes:
+      - .:/app
+      - maven-repo:/root/.m2
+    working_dir: /app
+    command: mvn spring-boot:run
+    environment:
+      - EUREKA_HOST=discovery-server
+    networks:
+      - spring_microservices
+      - internal
+
+volumes:
+  maven-repo:
+
+networks:
+  internal:
+  spring_microservices:
+    external: true
