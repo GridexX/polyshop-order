@@ -32,6 +32,12 @@ public class RabbitMqConfig {
     return new Queue("inventory_cancel", false);
   }
 
+  // Queue used to listen to the inventory service confirmed message
+  @Bean
+  public Queue inventoryConfirmedQueue() {
+    return new Queue("inventory_confirmed", false);
+  }
+
   // Queue used to send the inventory service message
   @Bean
   public Queue inventoryQueue() {
@@ -65,6 +71,21 @@ public class RabbitMqConfig {
     container.setConnectionFactory(connectionFactory);
     container.setQueueNames("inventory_cancel");
     container.setMessageListener(listenerAdapterCancel);
+    return container;
+  }
+
+  @Bean 
+  public MessageListenerAdapter listenerAdapterConfirmed(OrderService orderService) {
+    return new MessageListenerAdapter(orderService, "receiveMessageConfirmed");
+  }
+
+  @Bean
+  public SimpleMessageListenerContainer containerConfirmed(ConnectionFactory connectionFactory,
+      MessageListenerAdapter listenerAdapterConfirmed) {
+    SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+    container.setConnectionFactory(connectionFactory);
+    container.setQueueNames("inventory_confirmed");
+    container.setMessageListener(listenerAdapterConfirmed);
     return container;
   }
 

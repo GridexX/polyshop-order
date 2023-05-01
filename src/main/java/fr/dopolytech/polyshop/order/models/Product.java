@@ -5,13 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "product")
+@Data
 public class Product {
     @Id
     @GeneratedValue
     private long id;
+
+    @Column(name = "product_id")
+    private String productId;
 
     @Column(name = "name")
     private String name;
@@ -28,7 +33,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(long quantity, long orderId) {
+    public Product(String productId, long quantity, long orderId) {
+        this.productId = productId;
         this.quantity = quantity;
         this.orderId = orderId;
     }
@@ -40,15 +46,4 @@ public class Product {
         this.orderId = orderId;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public long getOrderId() {
-        return orderId;
-    }
 }

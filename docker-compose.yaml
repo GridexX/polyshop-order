@@ -13,6 +13,8 @@ services:
       POSTGRES_DB: order
     networks:
       - internal
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
       
   order:
     image: maven:3.9-amazoncorretto-19
@@ -30,6 +32,7 @@ services:
 
 volumes:
   maven-repo:
+  postgres-data:
 
 networks:
   internal:
